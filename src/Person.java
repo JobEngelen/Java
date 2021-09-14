@@ -1,7 +1,7 @@
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public abstract class Person {
     private final String username;
@@ -32,8 +32,36 @@ public abstract class Person {
 
     public String DisplayPerson() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-        return ID + " " + firstName + " " + lastName + " " + birthDate.format(formatter) + " " + age;
+        return String.format("%2s %10s %10s %10s %5s", ID, firstName, lastName, birthDate.format(formatter), age);
+        //return ID + " " + firstName + " " + lastName + " " + birthDate.format(formatter) + " " + age;
     }
 
-    abstract String DisplayStudents(Person person);
+    public boolean checkUsernameExists(List<Person> persons, String input) {
+        for (Person person : persons) {
+            if (person.username.equals(input)) return true;
+        }
+        return false;
+    }
+
+    public Person checkID(List<Person> persons, int personID) {
+        for (Person person : persons) {
+            if (person.ID == personID && person.getClass().equals(Student.class)) return person;
+        }
+        return null;
+    }
+
+    public void reportInfo(Person person) {
+        System.out.println("Report of student " + firstName + " " + lastName);
+        System.out.println();
+        System.out.printf("%10s %20s%n", "Student Id", ID);
+        System.out.printf("%10s %20s%n", "First name", firstName);
+        System.out.printf("%10s %20s%n", "Last name", lastName);
+        System.out.printf("%10s %20s%n", "Age", age);
+    }
+
+    abstract String DisplayStudents();
+    abstract Person AddStudent(List<Person> persons);
+    abstract String DisplayReports();
+    abstract void reportDetails(Person person);
+    abstract void updateReport();
 }
